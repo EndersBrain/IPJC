@@ -33,7 +33,6 @@ public class PlayerControllerClean : MonoBehaviour
         m_characterController = GetComponent<CharacterController>();
 
         m_controls = new PlayerControls();
-        m_controls.Player.Enable();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -41,6 +40,16 @@ public class PlayerControllerClean : MonoBehaviour
         if (m_fpvCameraTransform != null) {
             m_fpvCameraTransform.gameObject.SetActive(true);
         }
+    }
+
+    void OnEnable()
+    {
+        m_controls.Player.Enable();
+    }
+
+    void OnDisable()
+    {
+        m_controls.Player.Disable();
     }
 
     private void Update()
