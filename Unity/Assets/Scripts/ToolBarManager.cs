@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ToolBarManager : MonoBehaviour
 {   
@@ -28,12 +29,22 @@ public class ToolBarManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.inputString != null)
+        var keyboard = Keyboard.current;
+        if (keyboard == null) return;
+
+        foreach (var key in keyboard.allKeys)
         {
-            bool isNumber = int.TryParse(Input.inputString, out int number);
-            if (isNumber && number > 0 && number <= toolbarSlots.Length)
+            if (key.wasPressedThisFrame)
             {
-                ChangeSelectedSlot(number - 1);
+                string keyName = key.displayName;
+
+                if (int.TryParse(keyName, out int number))
+                {
+                    if (number > 0 && number <= toolbarSlots.Length)
+                    {
+                        ChangeSelectedSlot(number - 1);
+                    }
+                }
             }
         }
     }
