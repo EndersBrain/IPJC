@@ -17,7 +17,6 @@ public class TMP_ParkourSpiralGenerator : MonoBehaviour
 
     [Header("Player Jump Constraints")]
     [SerializeField] private float _singleJumpHeight = 1.8f;
-    [SerializeField] private float _maxSprintSpeed = 8f;
 
     private float _safeVerticalStep;
     private float _safeHorizontalGap;
