@@ -59,6 +59,7 @@ public class ToolBarManager : MonoBehaviour
         toolbarSlots[newValue].Select();
         selectedSlot = newValue;
 
+        EquipSelectedWeapon();
     }
 
     public bool AddItem(Item item)
@@ -132,5 +133,15 @@ public class ToolBarManager : MonoBehaviour
         ToolBarSlot slot = toolbarSlots[selectedSlot];
         ToolBarItem itemInSlot = slot.GetComponentInChildren<ToolBarItem>();
         return itemInSlot != null ? itemInSlot.item : null;
+    }
+
+    void EquipSelectedWeapon()
+    {
+        Item item = GetSelectedItemRaw();
+
+        if (item != null)
+        {
+            Object.FindFirstObjectByType<WeaponHolder>().Equip(item);
+        }
     }
 }

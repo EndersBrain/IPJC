@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   actionType: 0
-  image: {fileID: 21300000, guid: 36d52db6ad249ec4f8c3ac61aec451a6, type: 3}
+  image: {fileID: 21300000, guid: 364fe66dfc1928f459ee6b9e6117341b, type: 3}
   range: {x: 5, y: 4}
   stackable: 0
   itemCost: 20

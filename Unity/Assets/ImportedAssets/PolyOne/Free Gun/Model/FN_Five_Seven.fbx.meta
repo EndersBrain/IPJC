@@ -1,9 +1,21 @@
 fileFormatVersion: 2
 guid: bc6937a2b57f0e64684a15f05f97ff56
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308387
+  packageName: Free Gun Packs
+  packageVersion: 0.0.1
+  assetPath: Assets/PolyOne/Free Gun/Model/FN_Five_Seven.fbx
+  uploadId: 731363
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Props_Gun_M
+    second: {fileID: 2100000, guid: 7deee5839bc8b104286b06c6268d459a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -16,8 +28,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -107,10 +117,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 308387
-  packageName: Free Gun Packs
-  packageVersion: 0.0.1
-  assetPath: Assets/PolyOne/Free Gun/Model/FN_Five_Seven.fbx
-  uploadId: 731363
