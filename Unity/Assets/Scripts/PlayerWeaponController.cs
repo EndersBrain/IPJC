@@ -11,7 +11,10 @@ public class PlayerWeaponController : MonoBehaviour
     
     [Tooltip("The currently equipped weapon.")]
     public Weapon currentWeapon;
-    
+
+    [Tooltip("The currently equipped Item.")]
+    public Item currentItem;
+
     [Tooltip("Max distance for the aiming raycast.")]
     public float aimRaycastDistance = 100f;
 

@@ -755,7 +755,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5962101247343467892, guid: df74a76c410006450804f43873ce7261, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1320590318}
   m_SourcePrefab: {fileID: 100100000, guid: df74a76c410006450804f43873ce7261, type: 3}
 --- !u!1 &1118838714 stripped
 GameObject:
@@ -1089,6 +1092,27 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c019ec97085ca9a4eafbccf1781225ee, type: 3}
+--- !u!1 &1320590317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5962101247343467892, guid: df74a76c410006450804f43873ce7261, type: 3}
+  m_PrefabInstance: {fileID: 971746715}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1320590318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320590317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7577f9261a13c3ee90f796171c37494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1946680975}
+  currentWeapon: {fileID: 0}
+  currentItem: {fileID: 11400000, guid: 9cec2b5faf938cb4495bf441dd1a1384, type: 2}
+  aimRaycastDistance: 100
 --- !u!1 &1446264642 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7793255275087400958, guid: 87c473139d2c6d44387225698985ac4c, type: 3}
@@ -1421,6 +1445,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &1946680975 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5345479528470973352, guid: df74a76c410006450804f43873ce7261, type: 3}
+  m_PrefabInstance: {fileID: 971746715}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2039908036
 GameObject:
   m_ObjectHideFlags: 0
