@@ -18,38 +18,42 @@ public class PlayerPickup : MonoBehaviour
             nearbyItem = null;
     }
 
-    private void Update()
-    {
-        if (nearbyItem != null && Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            PickupItem(nearbyItem);
-        }
-    }
+    //OBSERVATION: This code is now handled in WorldItem.cs to simplify pickup logic. IDK if I will need this later so let it be commed
 
-    void PickupItem(WorldItem worldItem)
-    {
-        Item item = worldItem.item;
+    //private void Update()
+    //{
+    //    if (nearbyItem != null && Keyboard.current.eKey.wasPressedThisFrame)
+    //    {
+    //        PickupItem(nearbyItem);
+    //    }
+    //}
 
-        Debug.Log("Player picked up: " + item.name);
+    //void PickupItem(WorldItem worldItem)
+    //{
+    //    Item item = worldItem.item;
 
-        // Add item to toolbar
-        if (ToolBarManager.instance.AddItem(item))
-        {
-            // destroy from world
-            Destroy(worldItem.gameObject);
+    //    Debug.Log("Player picked up: " + item.name);
 
-            // Auto-equip in hand !!!BUT HELL IF I KNOW WHY THIS ISN'T WORKING(doesn't instantly equip for use...fuck me...we need to press the current slot button to equip it bruh)!!!
-            var holder = Object.FindFirstObjectByType<WeaponHolder>();
-            if (holder != null)
-            {
-                holder.Unequip();
-                holder.Equip(item);
-            }
-        }
-        else
-        {
-            Debug.Log("Inventory full!");
-        }
-    }
+    //    // Add item to toolbar
+    //    if (ToolBarManager.instance.AddItem(item))
+    //    {
+    //        // destroy from world
+    //        worldItem.gameObject.SetActive(false);
+
+    //        Destroy(worldItem.gameObject);
+
+    //        // Auto-equip in hand !!!BUT HELL IF I KNOW WHY THIS ISN'T WORKING(doesn't instantly equip for use...fuck me...we need to press the current slot button to equip it bruh)!!!
+    //        var holder = Object.FindFirstObjectByType<WeaponHolder>();
+    //        if (holder != null)
+    //        {
+    //            holder.Unequip();
+    //            holder.Equip(item);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Inventory full!");
+    //    }
+    //}
 
 }

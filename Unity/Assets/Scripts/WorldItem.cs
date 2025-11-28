@@ -47,9 +47,9 @@ public class WorldItem : MonoBehaviour
         {
             Debug.Log("Picked up: " + item.name);
 
-            ToolBarManager.instance.AddItem(item);
-
             Destroy(gameObject);
+
+            ToolBarManager.instance.AddItem(item);
         }
     }
 }
