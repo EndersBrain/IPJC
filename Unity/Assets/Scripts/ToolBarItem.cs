@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿// ToolBarItems for inventory management in-game
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -31,7 +31,7 @@ public class ToolBarItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         RefreshCount();
     }
 
-    public void RefreshCount()
+    public void RefreshCount() // Ignore this lil guy...he's shy and want to scare us with errors. Will use it later :)
     {
         countText.text = count.ToString();
         bool textActive = count > 1;

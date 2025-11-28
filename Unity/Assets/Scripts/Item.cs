@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+// Items that are used in the game, taken as ScriptableObjects
+
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Scriptable object/Item")]
 public class Item : ScriptableObject

@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿// The Manager for the Toolbar UI in the game, handling item addition, selection, and equipping weapons or other Items
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,25 +27,16 @@ public class ToolBarManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Update() // Sorry for this messy input handling, will refactor later
     {
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
 
-        foreach (var key in keyboard.allKeys)
+        for (int i = 1; i <= toolbarSlots.Length; i++)
         {
-            if (key.wasPressedThisFrame)
-            {
-                string keyName = key.displayName;
-
-                if (int.TryParse(keyName, out int number))
-                {
-                    if (number > 0 && number <= toolbarSlots.Length)
-                    {
-                        ChangeSelectedSlot(number - 1);
-                    }
-                }
-            }
+            if (keyboard.digit1Key.wasPressedThisFrame && i == 1) { ChangeSelectedSlot(0); }
+            if (keyboard.digit2Key.wasPressedThisFrame && i == 2) { ChangeSelectedSlot(1); }
+            if (keyboard.digit3Key.wasPressedThisFrame && i == 3) { ChangeSelectedSlot(2); }
         }
     }
 
@@ -139,9 +130,10 @@ public class ToolBarManager : MonoBehaviour
     {
         Item item = GetSelectedItemRaw();
 
+        if (Object.FindFirstObjectByType<WeaponHolder>().equippedItem == item)
+            return;
+
         if (item != null)
-        {
             Object.FindFirstObjectByType<WeaponHolder>().Equip(item);
-        }
     }
 }

@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+// ToolBarSlots for the ToolBar/Inventory system
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
