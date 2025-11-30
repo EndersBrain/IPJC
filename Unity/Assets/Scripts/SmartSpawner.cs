@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class SmartSpawner : MonoBehaviour
 {
 
     [Header("Settings")]
@@ -34,6 +34,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
 
     private int _currentSpawnCount = 0;
+
 
     void Start()
     {
@@ -136,10 +137,4 @@ public class NewMonoBehaviourScript : MonoBehaviour
         }
     }
 
-
-
-    void Update()
-    {
-        
-    }
 }
