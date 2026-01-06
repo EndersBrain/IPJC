@@ -1,16 +1,18 @@
+using NUnit.Framework.Internal.Commands;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SmartSpawner : MonoBehaviour
 {
 
     [Header("Settings")]
-    [Tooltip("The object you want to spawn (Prefab).")]
-    public GameObject objectToSpawn;
+    [Tooltip("The list of objects you want to spawn.")]
+    public List<GameObject> objectsToSpawn;
 
-    [Tooltip("How many copies to spawn.")]
-    public int numberOfCopies = 10;
+    [Tooltip("How many times to cycle through the entire list.")]
+    public int numberOfCopies = 1;
 
     [Tooltip("Time in seconds between each spawn.")]
     public float spawnCooldown = 0.5f;
@@ -34,49 +36,63 @@ public class SmartSpawner : MonoBehaviour
 
 
     private int _currentSpawnCount = 0;
+    private int _totalObjectsToSpawn = 0;
 
+    private List<float> _heightOffsets;
 
     void Start()
+    {
+        if (objectsToSpawn == null || objectsToSpawn.Count == 0)
+        {
+            Debug.LogError("SmartSpawner: No objects assigned in the list");
+            return;
+        }
+
+        ApplyLocationOverride();
+        CalculateHeightOffsets();
+
+        _totalObjectsToSpawn = objectsToSpawn.Count * numberOfCopies;
+
+        StartCoroutine(SpawnRoutine());
+    }
+
+    void ApplyLocationOverride()
     {
         if (useSpecificCoordinates)
         {
             transform.position = targetCoordinates;
         }
-
-        if (raiseFromTheGround && objectToSpawn != null)
-        {
-            Renderer r = objectToSpawn.GetComponent<Renderer>();
-
-            // if the main object doesn't have a renderer, its children may have it (common for more complex prefabs)
-            if (r == null)
-            {
-                r = objectToSpawn.GetComponentInChildren<Renderer>();
-            }
-
-            if (r != null)
-            {
-                float halfHeight = r.bounds.size.y / 2f;
-                transform.position += new Vector3(0, halfHeight, 0);
-            }
-            else
-            {
-                Debug.LogWarning("SmartSpawner: Could not find a Renderer on the object to calculate height!");
-            }
-        }
-
-        if (objectToSpawn != null)
-        {
-            StartCoroutine(SpawnRoutine());
-        }
-        else
-        {
-            Debug.LogError("SmartSpawner: No Object Assigned to 'Object To Spawn'!");
-        }
     }
 
+    void CalculateHeightOffsets()
+    {
+        _heightOffsets = new List<float>();
+
+        for (int i = 0; i < objectsToSpawn.Count; i++)
+        {
+            float offset = 0f;
+            if (raiseFromTheGround && objectsToSpawn[i] != null)
+            {
+                Renderer r = objectsToSpawn[i].GetComponent<Renderer>();
+                if (r == null)
+                {
+                    r = objectsToSpawn[i].GetComponentInChildren<Renderer>();
+                }
+                if (r != null)
+                {
+                    offset = r.bounds.size.y / 2f;
+                }
+                else
+                {
+                    Debug.LogWarning("SmartSpawner: Could not find a Renderer on one of the objects to calculate height!");
+                }
+            }
+            _heightOffsets.Add(offset);
+        }
+    }
     IEnumerator SpawnRoutine()
     {
-        while (_currentSpawnCount < numberOfCopies)
+        while (_currentSpawnCount < _totalObjectsToSpawn)
         {
             SpawnNextEntity();
             _currentSpawnCount++;
@@ -94,10 +110,21 @@ public class SmartSpawner : MonoBehaviour
 
     void SpawnNextEntity()
     {
-        Vector3 spawnOffset = CalculateSpiralPoint(_currentSpawnCount);
-        Vector3 finalPosition = transform.position + spawnOffset;
-        GameObject newObj = Instantiate(objectToSpawn, finalPosition, Quaternion.identity);
+        int listIndex = _currentSpawnCount % objectsToSpawn.Count;
+
+        if (objectsToSpawn[listIndex] == null) return;
+
+        Vector3 finalPosition = GetObjectPosition(listIndex);
+        
+        GameObject newObj = Instantiate(objectsToSpawn[listIndex], finalPosition, Quaternion.identity);
         newObj.transform.parent = transform;
+    }
+
+    Vector3 GetObjectPosition(int listIndex)
+    {
+        Vector3 spawnOffset = CalculateSpiralPoint(_currentSpawnCount);
+        float yAdjustment = _heightOffsets[listIndex];
+        return transform.position + spawnOffset + new Vector3(0, yAdjustment, 0);
     }
 
     Vector3 CalculateSpiralPoint(int index)
@@ -122,18 +149,19 @@ public class SmartSpawner : MonoBehaviour
         Gizmos.color = Color.green;
         Vector3 center = useSpecificCoordinates ? targetCoordinates : transform.position;
 
-        int previewCount = numberOfCopies > 0 ? numberOfCopies : 10;
+        int listCount = (objectsToSpawn != null && objectsToSpawn.Count > 0) ? objectsToSpawn.Count : 1;
+        int previewCount = numberOfCopies * listCount;
 
         for (int i = 0; i < previewCount; i++)
         {
             Vector3 point = center + CalculateSpiralPoint(i);
             Gizmos.DrawWireSphere(point, 0.3f);
 
-            if (i < previewCount - 1)
+            /*if (i < previewCount - 1)
             {
                 Vector3 nextPoint = center + CalculateSpiralPoint(i + 1);
-                /*Gizmos.DrawLine(point, nextPoint);*/
-            }
+                Gizmos.DrawLine(point, nextPoint);
+            }*/
         }
     }
 
