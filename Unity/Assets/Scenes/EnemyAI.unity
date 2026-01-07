@@ -3817,12 +3817,12 @@ MonoBehaviour:
   healthBar: {fileID: 2126838988}
   currentState: 0
   loseAggroDelay: 0.5
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 514375585092279182, guid: f1d7ae2831796ff48b591cb9242be715, type: 3}
   shootPoint: {fileID: 2096346729}
   shootCooldown: 1.5
   shootRange: 12
   projectileSpeed: 18
-  accuracyDegrees: 7
+  accuracyDegrees: 0
 --- !u!4 &2096346729 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6598916304306860996, guid: 61d88781c95e1144f9fda07b46256660, type: 3}
