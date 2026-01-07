@@ -104,19 +104,18 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
 
+        rb.isKinematic = true;
+
         if (healthBar != null)
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
 
-
-        patrolPoints = patrolParent.GetComponentsInChildren<Transform>();
-
-        patrolPoints = patrolPoints
+        patrolPoints = patrolParent.GetComponentsInChildren<Transform>()
             .Where(p => p != patrolParent)
             .ToArray();
 
         PickRandomPatrolPoint();
-
     }
+
 
 
 

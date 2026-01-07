@@ -114,18 +114,18 @@ public class ShooterEnemyController: MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
 
+
+        rb.isKinematic = true;
+
+
         if (healthBar != null)
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
 
-
-        patrolPoints = patrolParent.GetComponentsInChildren<Transform>();
-
-        patrolPoints = patrolPoints
+        patrolPoints = patrolParent.GetComponentsInChildren<Transform>()
             .Where(p => p != patrolParent)
             .ToArray();
 
         PickRandomPatrolPoint();
-
     }
 
 
@@ -224,32 +224,6 @@ public class ShooterEnemyController: MonoBehaviour
     }
 
 
-
-    //void AggroBehaviour()
-    //{
-    //    //When it sees the player only rotate
-
-    //    //rb.linearVelocity = Vector3.zero;
-
-    //    //Vector3 lookDir = player.position - transform.position;
-    //    //lookDir.y = 0;
-
-    //    //if (lookDir != Vector3.zero)
-    //    //{
-    //    //    Quaternion targetRot = Quaternion.LookRotation(lookDir);
-    //    //    transform.rotation = Quaternion.Slerp(
-    //    //        transform.rotation,
-    //    //        targetRot,
-    //    //        5f * Time.fixedDeltaTime
-    //    //    );
-    //    //}
-
-    //    moveSpeed = 2.5f;
-    //    MoveTowards(player.position, moveSpeed);
-
-
-
-    //}
     void ShootAtPlayer()
     {
 

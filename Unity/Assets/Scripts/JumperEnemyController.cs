@@ -114,18 +114,16 @@ public class JumperEnemyController: MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
 
+        rb.isKinematic = true;
+
         if (healthBar != null)
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
 
-
-        patrolPoints = patrolParent.GetComponentsInChildren<Transform>();
-
-        patrolPoints = patrolPoints
+        patrolPoints = patrolParent.GetComponentsInChildren<Transform>()
             .Where(p => p != patrolParent)
             .ToArray();
 
         PickRandomPatrolPoint();
-
     }
 
 
@@ -224,41 +222,40 @@ public class JumperEnemyController: MonoBehaviour
     }
 
 
-
-    //void AggroBehaviour()
+    //void JumpTowardsPlayer()
     //{
-    //    //When it sees the player only rotate
+    //    if (rb == null || player == null) return;
 
-    //    //rb.linearVelocity = Vector3.zero;
-
-    //    //Vector3 lookDir = player.position - transform.position;
-    //    //lookDir.y = 0;
-
-    //    //if (lookDir != Vector3.zero)
-    //    //{
-    //    //    Quaternion targetRot = Quaternion.LookRotation(lookDir);
-    //    //    transform.rotation = Quaternion.Slerp(
-    //    //        transform.rotation,
-    //    //        targetRot,
-    //    //        5f * Time.fixedDeltaTime
-    //    //    );
-    //    //}
-
-    //    moveSpeed = 2.5f;
-    //    MoveTowards(player.position, moveSpeed);
-
-
-
+    //    Vector3 direction = (player.position - transform.position).normalized;
+    //    direction.y = 0.5f; // Ridica putin saritura
+    //    rb.AddForce(direction.normalized * jumpForce, ForceMode.VelocityChange);
     //}
+
+    IEnumerator ResetKinematic()
+    {
+        yield return new WaitForSeconds(1f);
+        if (rb != null && !isDead)
+        {
+            rb.isKinematic = true;
+        }
+            
+    }
 
 
     void JumpTowardsPlayer()
     {
         if (rb == null || player == null) return;
 
+        // Temporarily set isKinematic to false to allow physics-based jump
+        rb.isKinematic = false;
+
         Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0.5f; // Ridica putin saritura
+        direction.y = 0.5f; // Add upward force for the jump
+
         rb.AddForce(direction.normalized * jumpForce, ForceMode.VelocityChange);
+
+        // Optionally, set isKinematic back to true after a short delay if needed
+        StartCoroutine(ResetKinematic());
     }
 
 
