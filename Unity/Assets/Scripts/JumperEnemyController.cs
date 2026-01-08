@@ -545,6 +545,23 @@ public class JumperEnemyController: MonoBehaviour
                     }
                 }
                 break;
+
+
+            case AIState.Search:
+                if (seesPlayer)
+                {
+                    Debug.Log("SEARCH -> AGGRO");
+                    currentState = AIState.Aggro;
+
+                    reachedLastSeen = false;
+                    isScanning = false;
+                    loseAggroTimer = 0f;
+
+                    lastSeenPlayerPosition = player.position;
+                    lastSeenPlayerPosition.y = transform.position.y;
+                    hasLastSeenPosition = true;
+                }
+                break;
         }
 
 

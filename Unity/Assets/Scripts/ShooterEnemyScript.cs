@@ -106,10 +106,14 @@ public class ShooterEnemyController: MonoBehaviour
     private float shootTimer = 0f;
 
 
+    Animator animator;
 
 
     void Start()
     {
+
+        animator = GetComponent<Animator>();
+
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
@@ -168,6 +172,8 @@ public class ShooterEnemyController: MonoBehaviour
         // ================= ARRIVED =================
         if (distance < 0.8f)
         {
+            animator.SetBool("isWalking", false);
+
             rb.linearVelocity = Vector3.zero;
 
 
@@ -229,6 +235,8 @@ public class ShooterEnemyController: MonoBehaviour
 
         Debug.Log("Trage!");
 
+        animator.SetTrigger("isAttacking");
+
         if (projectilePrefab == null || shootPoint == null || player == null) return;
 
         Vector3 direction = (player.position + Vector3.up * 1.2f - shootPoint.position).normalized;
@@ -260,6 +268,7 @@ public class ShooterEnemyController: MonoBehaviour
         if (distance <= shootRange)
         {
             rb.linearVelocity = Vector3.zero;
+            animator.SetBool("isWalking", false);
 
             // Se uita spre jucator
             Vector3 lookDir = player.position - transform.position;
@@ -323,6 +332,8 @@ public class ShooterEnemyController: MonoBehaviour
             isScanning = true;
             scanTimer = 0f;
         }
+
+        animator.SetBool("isWalking", false);
 
         transform.Rotate(Vector3.up, scanRotationSpeed * Time.fixedDeltaTime);
         scanTimer += Time.fixedDeltaTime;
@@ -400,6 +411,7 @@ public class ShooterEnemyController: MonoBehaviour
         Vector3 newPos = rb.position + direction * speed * Time.fixedDeltaTime;
 
         rb.MovePosition(newPos);
+        animator.SetBool("isWalking", true);
 
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
@@ -442,8 +454,6 @@ public class ShooterEnemyController: MonoBehaviour
             TakeDamage(25f);
         }
 
-        //bool seesPlayer = CheckVision();
-
         canSeePlayer = CheckVision();
         bool seesPlayer = canSeePlayer;
 
@@ -475,6 +485,7 @@ public class ShooterEnemyController: MonoBehaviour
                 }
                 else
                 {
+
                     loseAggroTimer += Time.deltaTime;
                     if (loseAggroTimer >= loseAggroDelay)
                     {
@@ -482,6 +493,23 @@ public class ShooterEnemyController: MonoBehaviour
                         loseAggroTimer = 0f;
                         currentState = AIState.Search;
                     }
+                }
+                break;
+
+
+            case AIState.Search:
+                if (seesPlayer)
+                {
+                    Debug.Log("SEARCH -> AGGRO");
+                    currentState = AIState.Aggro;
+
+                    reachedLastSeen = false;
+                    isScanning = false;
+                    loseAggroTimer = 0f;
+
+                    lastSeenPlayerPosition = player.position;
+                    lastSeenPlayerPosition.y = transform.position.y;
+                    hasLastSeenPosition = true;
                 }
                 break;
         }
@@ -505,19 +533,10 @@ public class ShooterEnemyController: MonoBehaviour
 
     private void Die()
     {
+
+        animator.SetBool("isDead", true);
+
         isDead = true;
-
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            rb.centerOfMass = new Vector3(0, -0.3f, 0);
-
-
-            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 0, -1f) * 5f, ForceMode.Impulse);
-            rb.AddTorque(new Vector3(100f, 0f, Random.Range(-50f, 50f)));
-        }
 
 
         StartCoroutine(DestroyAfterDelay(5f));
