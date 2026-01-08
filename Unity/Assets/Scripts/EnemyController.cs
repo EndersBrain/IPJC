@@ -95,11 +95,16 @@ public class EnemyController : MonoBehaviour
     private bool reachedLastSeen = false;
 
 
+    Animator animator;
 
+    [SerializeField] Transform warriorVisual;
 
 
     void Start()
     {
+
+        animator = GetComponentInChildren<Animator>();
+
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
@@ -157,6 +162,8 @@ public class EnemyController : MonoBehaviour
         // ================= ARRIVED =================
         if (distance < 0.8f)
         {
+            animator.SetBool("isWalking", false);
+
             rb.linearVelocity = Vector3.zero;
 
             
@@ -276,6 +283,8 @@ public class EnemyController : MonoBehaviour
             scanTimer = 0f;
         }
 
+        animator.SetBool("isWalking", false);
+
         transform.Rotate(Vector3.up, scanRotationSpeed * Time.fixedDeltaTime);
         scanTimer += Time.fixedDeltaTime;
 
@@ -352,6 +361,7 @@ public class EnemyController : MonoBehaviour
         Vector3 newPos = rb.position + direction * speed * Time.fixedDeltaTime;
 
         rb.MovePosition(newPos);
+        animator.SetBool("isWalking", true);
 
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
@@ -455,25 +465,51 @@ public class EnemyController : MonoBehaviour
             Die();
     }
 
+
+
+    IEnumerator EnableCorpseCollider()
+    {
+        Quaternion startRot = warriorVisual.rotation;
+        Quaternion endRot = Quaternion.Euler(startRot.eulerAngles + new Vector3(90f, 0f, 0f));
+
+        float duration = 1.2f;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            warriorVisual.rotation = Quaternion.Slerp(startRot, endRot, t / duration);
+            yield return null;
+        }
+
+
+        col.enabled = true;
+        rb.isKinematic = true;
+
+    }
+
+
     private void Die()
     {
         isDead = true;
 
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            rb.centerOfMass = new Vector3(0, -0.3f, 0);
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.None;
 
+        if (col != null)
+            col.enabled = false;
 
-            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 0, -1f) * 5f, ForceMode.Impulse);
-            rb.AddTorque(new Vector3(100f, 0f, Random.Range(-50f, 50f)));
-        }
-
+        //animator.SetBool("isDead", true);
+        animator.SetBool("isWalking", false);
 
         StartCoroutine(DestroyAfterDelay(5f));
+        StartCoroutine(EnableCorpseCollider());
     }
+
+
 
     private IEnumerator DestroyAfterDelay(float delay)
     {
