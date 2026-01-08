@@ -110,6 +110,13 @@ public class JumperEnemyController: MonoBehaviour
     [SerializeField] Transform spiderVisual;
 
 
+    [SerializeField] private float attackRange = 2.5f;
+    [SerializeField] private float attackCooldown = 1.5f;
+    private float attackTimer = 0f;
+
+    [SerializeField] private float jumpRange = 6f;
+
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -259,10 +266,21 @@ public class JumperEnemyController: MonoBehaviour
 
     void AggroBehaviour()
     {
+        if (isDead) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        // ===========================
+        // 1. SPECIAL ATTACK: JUMP
+        // ===========================
         if (isPreparingJump)
         {
             rb.linearVelocity = Vector3.zero;
+
+            animator.SetBool("isWalking", false);
+
             jumpTimer += Time.fixedDeltaTime;
+
             if (jumpTimer >= jumpDelay)
             {
                 JumpTowardsPlayer();
@@ -270,22 +288,59 @@ public class JumperEnemyController: MonoBehaviour
                 jumpTimer = 0f;
                 jumpCooldownTimer = 0f;
             }
+
             return;
         }
 
         jumpCooldownTimer += Time.fixedDeltaTime;
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Poti ajusta distanta la care incepe sa se pregateasca de saritura
-        if (distanceToPlayer < 4f && jumpCooldownTimer >= jumpCooldown)
+        // Jump trigger logic
+        if (distanceToPlayer < jumpRange && jumpCooldownTimer >= jumpCooldown)
         {
             isPreparingJump = true;
             jumpTimer = 0f;
             rb.linearVelocity = Vector3.zero;
+
+            animator.SetBool("isWalking", false);
+
+            animator.SetTrigger("isAttacking"); // OPTIONAL
             return;
         }
 
-        // Se apropie de jucator
+        // ===========================
+        // 2. NORMAL ATTACK: MELEE
+        // ===========================
+        attackTimer += Time.fixedDeltaTime;
+
+        if (distanceToPlayer <= attackRange)
+        {
+            rb.linearVelocity = Vector3.zero;
+
+            animator.SetBool("isWalking", false);
+
+            Vector3 dir = player.position - transform.position;
+            dir.y = 0;
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    10f * Time.fixedDeltaTime
+                );
+            }
+
+            if (attackTimer >= attackCooldown)
+            {
+                animator.SetTrigger("isAttacking");
+                attackTimer = 0f;
+            }
+
+            return;
+        }
+
+        // ===========================
+        // 3. MOVE/FOLLOW
+        // ===========================
         moveSpeed = 2.5f;
         MoveTowards(player.position, moveSpeed);
     }

@@ -99,6 +99,10 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] Transform warriorVisual;
 
+    [SerializeField] private float attackRange = 2.0f;
+    [SerializeField] private float attackCooldown = 1.5f;
+    private float attackTimer = 0f;
+
 
     void Start()
     {
@@ -223,22 +227,41 @@ public class EnemyController : MonoBehaviour
 
     void AggroBehaviour()
     {
-        //When it sees the player only rotate
 
-        //rb.linearVelocity = Vector3.zero;
+        if (isDead) return;
 
-        //Vector3 lookDir = player.position - transform.position;
-        //lookDir.y = 0;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        //if (lookDir != Vector3.zero)
-        //{
-        //    Quaternion targetRot = Quaternion.LookRotation(lookDir);
-        //    transform.rotation = Quaternion.Slerp(
-        //        transform.rotation,
-        //        targetRot,
-        //        5f * Time.fixedDeltaTime
-        //    );
-        //}
+        // ===========================
+        // 2. NORMAL ATTACK: MELEE
+        // ===========================
+        attackTimer += Time.fixedDeltaTime;
+
+        if (distanceToPlayer <= attackRange)
+        {
+            rb.linearVelocity = Vector3.zero;
+
+            animator.SetBool("isWalking", false);
+
+            Vector3 dir = player.position - transform.position;
+            dir.y = 0;
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    10f * Time.fixedDeltaTime
+                );
+            }
+
+            if (attackTimer >= attackCooldown)
+            {
+                animator.SetTrigger("isAttacking");
+                attackTimer = 0f;
+            }
+
+            return;
+        }
 
         moveSpeed = 2.5f;
         MoveTowards(player.position, moveSpeed);
