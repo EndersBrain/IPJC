@@ -1,4 +1,4 @@
-// Drop the Items on Q
+﻿// Drop the Items on Q
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,20 +50,22 @@ public class DropItem : MonoBehaviour
             {
                 GameObject wrapper = Instantiate(worldItemWrapperPrefab, transform.position + transform.forward, Quaternion.identity);
 
-                // instantiate FBX
                 GameObject model = Instantiate(removed.prefabToEquip);
                 model.transform.SetParent(wrapper.transform);
                 model.transform.localPosition = Vector3.zero;
 
-                // Item go to wrapper
                 WorldItem wi = wrapper.GetComponent<WorldItem>();
                 wi.Initialize(removed, model);
             }
 
-            var holder = Object.FindFirstObjectByType<WeaponHolder>();
-            if (holder != null && holder.equippedItem == removed)
+            PlayerWeaponController pwc = Object.FindFirstObjectByType<PlayerWeaponController>();
+            if (pwc != null && pwc.currentItem == removed)
             {
-                holder.Unequip();
+                if (pwc.currentWeapon != null)
+                    Destroy(pwc.currentWeapon.gameObject);
+
+                pwc.currentWeapon = null;
+                pwc.currentItem = null;
             }
 
             RefreshToolbarItems();

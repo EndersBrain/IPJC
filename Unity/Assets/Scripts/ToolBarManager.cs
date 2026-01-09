@@ -129,11 +129,12 @@ public class ToolBarManager : MonoBehaviour
     void EquipSelectedWeapon()
     {
         Item item = GetSelectedItemRaw();
+        if (item == null) return;
 
-        if (Object.FindFirstObjectByType<WeaponHolder>().equippedItem == item)
-            return;
+        PlayerWeaponController pwc = Object.FindFirstObjectByType<PlayerWeaponController>();
+        if (pwc == null) return;
 
-        if (item != null)
-            Object.FindFirstObjectByType<WeaponHolder>().Equip(item);
+        pwc.currentItem = item;
+        pwc.EquipCurrentItem();
     }
 }

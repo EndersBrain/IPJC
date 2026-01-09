@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponHolder : MonoBehaviour
 {
-    public Transform handPosition;
+    public Transform weaponHolder;
     private GameObject currentWeapon;
     public Item equippedItem;
 
@@ -12,14 +12,14 @@ public class WeaponHolder : MonoBehaviour
     {
         if (item.prefabToEquip == null)
         {
-            Debug.LogWarning("Itemul doesn't have prefabToEquip set!");
+            Debug.LogWarning("Item doesn't have prefabToEquip set!");
             return;
         }
 
         if (currentWeapon != null)
             Destroy(currentWeapon);
 
-        currentWeapon = Instantiate(item.prefabToEquip, handPosition);
+        currentWeapon = Instantiate(item.prefabToEquip, weaponHolder);
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.transform.localRotation = Quaternion.identity;
 
