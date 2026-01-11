@@ -1052,13 +1052,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a318989a4200ef46b410ea48bc4fc45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 4096594873619902805, guid: ab101a9fa3d05164abd21d8f31d4ca5a, type: 3}
+  objectsToSpawn:
+  - {fileID: 0}
+  - {fileID: 5424425493246605712, guid: 39ed802613a7baffbb6bce42cbd4f224, type: 3}
+  - {fileID: 5424425493246605712, guid: 39ed802613a7baffbb6bce42cbd4f224, type: 3}
   numberOfCopies: 10
-  spawnCooldown: 1
+  spawnCooldown: 0.5
   raiseFromTheGround: 1
   useSpecificCoordinates: 0
-  targetCoordinates: {x: -1.89, y: 6.75, z: 14.29}
-  minSpacing: 1.96
+  targetCoordinates: {x: -2.2, y: 6.19, z: 19.9}
+  minSpacing: 1.3
 --- !u!4 &322184942
 Transform:
   m_ObjectHideFlags: 0
@@ -2197,12 +2200,40 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: minSpacing
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: spawnCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
       propertyPath: numberOfCopies
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
       propertyPath: raiseFromTheGround
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: targetCoordinates.x
+      value: -2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: targetCoordinates.y
+      value: 6.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: targetCoordinates.z
+      value: 19.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: useSpecificCoordinates
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187401257255987057, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
+      propertyPath: objectsToSpawn.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6198878489778247262, guid: d84e8671d59d9b344b4faf83a01e530e, type: 3}
       propertyPath: m_Name
