@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fbd3cc0dcca76c3b510fbac519f32b, type: 3}
   m_Name: Homing
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
+  rotationSpeed: 20
   findTargetRadius: 1.4
   targetLayer:
     serializedVersion: 2

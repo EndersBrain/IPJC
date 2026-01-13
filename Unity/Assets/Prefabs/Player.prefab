@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6552147035148998883}
   - component: {fileID: 3528657299702091469}
   - component: {fileID: 7472930194318531134}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Player_Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6415039665635711458}
+  - {fileID: 5690107842914386771}
   m_Father: {fileID: 4720252040840793937}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6552147035148998883
@@ -101,7 +102,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 131072
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -111,6 +112,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3026144579471380720
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5690107842914386771}
+  m_Layer: 31
+  m_Name: WeaponHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5690107842914386771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026144579471380720}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.5, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3455301989217937604}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &5096096103020394947
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +157,7 @@ GameObject:
   - component: {fileID: 2734228471614721683}
   m_Layer: 0
   m_Name: Player_FPV_Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,9 +291,12 @@ GameObject:
   - component: {fileID: 4720252040840793937}
   - component: {fileID: 6861557738571479366}
   - component: {fileID: 8182753166395337089}
-  m_Layer: 0
+  - component: {fileID: 3810551892565371957}
+  - component: {fileID: 6324288970617046038}
+  - component: {fileID: 6309236595547580752}
+  m_Layer: 16
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,6 +363,76 @@ MonoBehaviour:
   m_doubleJumpHeight: 1.5
   m_mouseSensitivity: 30
   m_fpvCameraTransform: {fileID: 6304147610296145794}
+  m_invincibilityDuration: 0.5
+--- !u!114 &3810551892565371957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962101247343467892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f5d0ff319ded6b9bbc4772a1a92534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statEntries:
+  - type: 2
+    stat:
+      BaseValue: 20
+      m_modifiers: []
+  - type: 3
+    stat:
+      BaseValue: 50
+      m_modifiers: []
+  - type: 4
+    stat:
+      BaseValue: 0
+      m_modifiers: []
+  - type: 0
+    stat:
+      BaseValue: 100
+      m_modifiers: []
+  regenConfigs: []
+--- !u!114 &6324288970617046038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962101247343467892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7577f9261a13c3ee90f796171c37494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 5345479528470973352}
+  currentWeapon: {fileID: 0}
+  currentItem: {fileID: 0}
+  aimRaycastDistance: 100
+  m_statController: {fileID: 3810551892565371957}
+  weaponHolder: {fileID: 5690107842914386771}
+--- !u!114 &6309236595547580752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962101247343467892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf0548ff04882c428eef1db2c22cbba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolbarItems:
+  - {fileID: 919132149155446097, guid: 8b7f7c65a4b3437489e590b8efb5ec7b, type: 3}
+  - {fileID: 919132149155446097, guid: 95e813491d120a84c90b40ebb8855d7f, type: 3}
+  - {fileID: 100000, guid: bc47d6d03a2cd0b4ab4297dfd2edfe5f, type: 3}
+  toolbarItemData:
+  - {fileID: 11400000, guid: 9cec2b5faf938cb4495bf441dd1a1384, type: 2}
+  - {fileID: 11400000, guid: e2414298a355a854e89a0a02ff47f32f, type: 2}
+  - {fileID: 11400000, guid: ac22f53844ed3b2408d16838573a0b93, type: 2}
+  worldItemWrapperPrefab: {fileID: 0}
 --- !u!1 &7914977849013862010
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +444,6 @@ GameObject:
   - component: {fileID: 6415039665635711458}
   - component: {fileID: 4248528595064724149}
   - component: {fileID: 3594171030065335957}
-  - component: {fileID: 4691614182969992473}
   m_Layer: 31
   m_Name: Face
   m_TagString: Untagged
@@ -393,7 +497,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3897625478d9cff1aa7b9609464e66f3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -415,24 +519,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4691614182969992473
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7914977849013862010}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
