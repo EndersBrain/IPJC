@@ -25,7 +25,7 @@ public class ShooterEnemyController : MonoBehaviour
     [SerializeField] private float visionRange = 15f;
     [SerializeField] private float visionAngle = 60f;
     [SerializeField] private LayerMask visionMask;
-    [SerializeField] private Transform player;
+    private Transform player;
     private bool canSeePlayer = false;
 
     [Header("Scan")]
@@ -83,6 +83,8 @@ public class ShooterEnemyController : MonoBehaviour
         agent.updatePosition = true;
 
         PickRandomPatrolPoint();
+
+        player = GameObject.Find("Player_Body").transform;
     }
 
     bool HasReachedDestination()
@@ -282,6 +284,31 @@ public class ShooterEnemyController : MonoBehaviour
         do newIndex = Random.Range(0, patrolPoints.Length);
         while (newIndex == currentPatrolIndex && patrolPoints.Length > 1);
         currentPatrolIndex = newIndex;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+        if (patrolParent == null) return;
+
+        Gizmos.color = Color.cyan;
+        foreach (Transform p in patrolParent)
+            Gizmos.DrawSphere(p.position, 0.25f);
+
+        Gizmos.color = canSeePlayer ? Color.red : Color.green;
+        Gizmos.DrawLine(
+            transform.position + Vector3.up * 0.5f,
+            player.position
+        );
+
+        Vector3 origin = transform.position + Vector3.up * 1.5f;
+        Gizmos.color = Color.yellow;
+
+        Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * transform.forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * transform.forward;
+
+        Gizmos.DrawLine(origin, origin + leftBoundary * visionRange);
+        Gizmos.DrawLine(origin, origin + rightBoundary * visionRange);
     }
 
     public void Update()

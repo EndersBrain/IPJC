@@ -27,7 +27,7 @@ public class JumperEnemyController : MonoBehaviour
     [SerializeField] private float visionRange = 15f;
     [SerializeField] private float visionAngle = 60f;
     [SerializeField] private LayerMask visionMask;
-    [SerializeField] private Transform player;
+    private Transform player;
     private bool canSeePlayer = false;
 
     [Header("Scan")]
@@ -65,7 +65,7 @@ public class JumperEnemyController : MonoBehaviour
     [SerializeField] private float dashSpeed = 6.0f;
     [Tooltip("Viteza la patrulare.")]
     [SerializeField] private float patrolSpeed = 1.5f;
-    [Tooltip("Viteza în Search.")]
+    [Tooltip("Viteza ï¿½n Search.")]
     [SerializeField] private float searchSpeed = 2.0f;
 
     private bool isDashing = false;
@@ -119,6 +119,8 @@ public class JumperEnemyController : MonoBehaviour
         agent.updateRotation = true;
 
         PickRandomPatrolPoint();
+
+        player = GameObject.Find("Player_Body").transform;
     }
 
 
@@ -373,6 +375,7 @@ public class JumperEnemyController : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if (!Application.isPlaying) return;
         if (patrolParent == null || player == null) return;
 
         Gizmos.color = Color.cyan;
