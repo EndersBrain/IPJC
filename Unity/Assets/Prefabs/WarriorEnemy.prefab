@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 4603406172896831147}
   - component: {fileID: 319980452580533384}
   - component: {fileID: 1208188250239224322}
+  - component: {fileID: 7470281807959256683}
   m_Layer: 0
   m_Name: WarriorEnemy
   m_TagString: Untagged
@@ -173,7 +174,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -191,22 +192,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolParent: {fileID: 0}
   waitTimeAtPoint: 2
-  arrivalDistance: 0.4
   visionRange: 15
   visionAngle: 40
   visionMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 66048
   player: {fileID: 0}
   scanRotationSpeed: 120
   scanDuration: 3
-  searchArrivalDistance: 0.8
-  moveSpeed: 1.5
   maxHealth: 100
   healthBar: {fileID: 2415894179486292752}
   currentState: 0
   loseAggroDelay: 0.5
   warriorVisual: {fileID: 2895434704898971647}
+  attackRange: 2
+  attackCooldown: 1.5
+--- !u!195 &7470281807959256683
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136802685188797294}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 220
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &7753904030948788298
 GameObject:
   m_ObjectHideFlags: 0

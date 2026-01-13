@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float visionRange = 15f;
     [SerializeField] private float visionAngle = 60f;
     [SerializeField] private LayerMask visionMask;
-    [SerializeField] private Transform player;
+    private Transform player;
     private bool canSeePlayer = false;
 
     [Header("Scan")]
@@ -84,6 +84,8 @@ public class EnemyController : MonoBehaviour
             .ToArray();
 
         PickRandomPatrolPoint();
+
+        player = GameObject.Find("Player_Body").transform;
     }
 
     // Aceasta functie inlocuieste logica veche de verificare distanta
@@ -430,6 +432,7 @@ public class EnemyController : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if (!Application.isPlaying) return;
         if (patrolParent == null) return;
 
         Gizmos.color = Color.cyan;
