@@ -263,6 +263,13 @@ public class InGameStatInspector : MonoBehaviour
             AppendStatController(sb, statController);
         }
 
+        // Try Enemy AI Controllers
+        var baseAI = target.GetComponent<BaseEnemyAI>() ?? target.GetComponentInParent<BaseEnemyAI>();
+        if (baseAI != null) {
+            foundAnything = true;
+            AppendEnemyAI(sb, baseAI);
+        }
+
         // Try Projectile
         var projectile = target.GetComponent<Projectile>();
         if (projectile != null) {
@@ -279,7 +286,7 @@ public class InGameStatInspector : MonoBehaviour
 
         if (!foundAnything) {
             sb.AppendLine("No inspectable components found on this object.");
-            sb.AppendLine("Supports: StatController, Projectile, EnemyProjectile");
+            sb.AppendLine("Supports: StatController, BaseEnemyAI, Projectile, EnemyProjectile");
         }
 
         m_overlayText = sb.ToString();
@@ -472,6 +479,161 @@ public class InGameStatInspector : MonoBehaviour
         }
 
         sb.AppendLine();
+    }
+
+    // =========================================================================
+    // ENEMY AI CONTROLLERS
+    // =========================================================================
+    private void AppendEnemyAI(StringBuilder sb, BaseEnemyAI ai)
+    {
+        string aiType = ai.GetType().Name;
+        sb.AppendLine("┌─────────────────────────────────┐");
+        sb.AppendLine($"│  ENEMY AI: {aiType,-20}│");
+        sb.AppendLine("└─────────────────────────────────┘");
+
+        // Get base AI fields using reflection
+        var baseType = typeof(BaseEnemyAI);
+        
+        // Vision settings
+        var visionRange = GetPrivateField<float>(ai, "visionRange", baseType);
+        var visionAngleH = GetPrivateField<float>(ai, "visionAngleHorizontal", baseType);
+        var visionAngleV = GetPrivateField<float>(ai, "visionAngleVertical", baseType);
+        var proximityRadius = GetPrivateField<float>(ai, "proximityRadius", baseType);
+        var postSightTrack = GetPrivateField<float>(ai, "postSightTrackDuration", baseType);
+        
+        sb.AppendLine();
+        sb.AppendLine("──── VISION ────");
+        sb.AppendLine($"  Range: {visionRange:F1}m");
+        sb.AppendLine($"  Horizontal FOV: ±{visionAngleH:F0}°");
+        sb.AppendLine($"  Vertical FOV: ±{visionAngleV:F0}°");
+        sb.AppendLine($"  Proximity Radius: {proximityRadius:F1}m");
+        sb.AppendLine($"  Post-Sight Track: {postSightTrack:F1}s");
+
+        // Movement speeds
+        var patrolSpeed = GetPrivateField<float>(ai, "patrolSpeed", baseType);
+        var searchSpeed = GetPrivateField<float>(ai, "searchSpeed", baseType);
+        var aggroSpeed = GetPrivateField<float>(ai, "aggroSpeed", baseType);
+        
+        sb.AppendLine();
+        sb.AppendLine("──── MOVEMENT ────");
+        sb.AppendLine($"  Patrol Speed: {patrolSpeed:F1}");
+        sb.AppendLine($"  Search Speed: {searchSpeed:F1}");
+        sb.AppendLine($"  Aggro Speed: {aggroSpeed:F1}");
+
+        // Type-specific info
+        if (ai is MeleeEnemyController melee)
+        {
+            AppendMeleeAI(sb, melee);
+        }
+        else if (ai is JumperEnemyController jumper)
+        {
+            AppendJumperAI(sb, jumper);
+        }
+        else if (ai is ShooterEnemyController shooter)
+        {
+            AppendShooterAI(sb, shooter);
+        }
+
+        sb.AppendLine();
+    }
+
+    private void AppendMeleeAI(StringBuilder sb, MeleeEnemyController melee)
+    {
+        var attackRange = GetPrivateField<float>(melee, "attackRange");
+        var attackCooldown = GetPrivateField<float>(melee, "attackCooldown");
+        var damageRadius = GetPrivateField<float>(melee, "attackDamageRadius");
+        var damageDelay = GetPrivateField<float>(melee, "damageDelay");
+        
+        sb.AppendLine();
+        sb.AppendLine("──── MELEE ATTACK ────");
+        sb.AppendLine($"  Attack Range: {attackRange:F1}m");
+        sb.AppendLine($"  Attack Cooldown: {attackCooldown:F1}s");
+        sb.AppendLine($"  Damage Radius: {damageRadius:F1}m");
+        sb.AppendLine($"  Damage Delay: {damageDelay:F2}s");
+    }
+
+    private void AppendJumperAI(StringBuilder sb, JumperEnemyController jumper)
+    {
+        var leapRange = GetPrivateField<float>(jumper, "leapRange");
+        var minLeapRange = GetPrivateField<float>(jumper, "minLeapRange");
+        var leapCooldown = GetPrivateField<float>(jumper, "leapCooldown");
+        var leapDuration = GetPrivateField<float>(jumper, "leapDuration");
+        var leapHeight = GetPrivateField<float>(jumper, "leapHeight");
+        var landingDamageRadius = GetPrivateField<float>(jumper, "landingDamageRadius");
+        
+        sb.AppendLine();
+        sb.AppendLine("──── LEAP ATTACK ────");
+        sb.AppendLine($"  Leap Range: {minLeapRange:F1}m - {leapRange:F1}m");
+        sb.AppendLine($"  Leap Cooldown: {leapCooldown:F1}s");
+        sb.AppendLine($"  Leap Duration: {leapDuration:F2}s");
+        sb.AppendLine($"  Leap Height: {leapHeight:F1}m");
+        sb.AppendLine($"  Landing Damage Radius: {landingDamageRadius:F1}m");
+        
+        var attackRange = GetPrivateField<float>(jumper, "attackRange");
+        var attackCooldown = GetPrivateField<float>(jumper, "attackCooldown");
+        
+        sb.AppendLine();
+        sb.AppendLine("──── MELEE ATTACK ────");
+        sb.AppendLine($"  Attack Range: {attackRange:F1}m");
+        sb.AppendLine($"  Attack Cooldown: {attackCooldown:F1}s");
+    }
+
+    private void AppendShooterAI(StringBuilder sb, ShooterEnemyController shooter)
+    {
+        var shootRange = GetPrivateField<float>(shooter, "shootRange");
+        var shootCooldown = GetPrivateField<float>(shooter, "shootCooldown");
+        var accuracy = GetPrivateField<float>(shooter, "accuracyDegrees");
+        var aimHeight = GetPrivateField<float>(shooter, "aimHeightOffset");
+        
+        sb.AppendLine();
+        sb.AppendLine("──── SHOOTING ────");
+        sb.AppendLine($"  Shoot Range: {shootRange:F1}m");
+        sb.AppendLine($"  Shoot Cooldown: {shootCooldown:F1}s");
+        sb.AppendLine($"  Accuracy: ±{accuracy:F1}°");
+        sb.AppendLine($"  Aim Height Offset: {aimHeight:F2}m");
+        
+        // Get SpellDefinition
+        var spellField = typeof(ShooterEnemyController).GetField("spellDefinition", 
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var spell = spellField?.GetValue(shooter) as SpellDefinition;
+        
+        if (spell != null)
+        {
+            sb.AppendLine();
+            sb.AppendLine("──── SPELL DEFINITION ────");
+            sb.AppendLine($"  Name: {spell.name}");
+            sb.AppendLine($"  Projectile: {(spell.projectilePrefab != null ? spell.projectilePrefab.name : "None")}");
+            
+            if (spell.effects != null && spell.effects.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("  Effects:");
+                foreach (var effect in spell.effects)
+                {
+                    sb.AppendLine($"    ▸ {effect.GetType().Name}");
+                    AppendEffectDetails(sb, effect);
+                }
+            }
+        }
+        else
+        {
+            sb.AppendLine();
+            sb.AppendLine("  ⚠ No SpellDefinition assigned!");
+        }
+    }
+
+    private T GetPrivateField<T>(object obj, string fieldName, System.Type type = null)
+    {
+        type = type ?? obj.GetType();
+        var field = type.GetField(fieldName, 
+            System.Reflection.BindingFlags.NonPublic | 
+            System.Reflection.BindingFlags.Instance | 
+            System.Reflection.BindingFlags.Public);
+        if (field != null)
+        {
+            return (T)field.GetValue(obj);
+        }
+        return default;
     }
 
     // =========================================================================

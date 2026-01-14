@@ -1806,13 +1806,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7072444061591351794}
-  - component: {fileID: 7072444061582351952}
   - component: {fileID: 6524544578548447079}
+  - component: {fileID: 8098580530910148078}
+  - component: {fileID: 8877952591482724127}
+  - component: {fileID: 7072444061582351952}
   - component: {fileID: 662673775638878576}
   - component: {fileID: 2429399820957631077}
   - component: {fileID: 1902946885968661944}
-  - component: {fileID: 8098580530910148078}
-  - component: {fileID: 8877952591482724127}
   m_Layer: 18
   m_Name: PolyartCharacter
   m_TagString: Untagged
@@ -1844,6 +1844,72 @@ Transform:
   - {fileID: 6557258860486200297}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6524544578548447079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072444061591711186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 833639417c499eb4bb9edea925fb8c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  patrolParent: {fileID: 0}
+  waitTimeAtPoint: 2
+  patrolSpeed: 1.5
+  visionRange: 23
+  visionAngleHorizontal: 60
+  visionAngleVertical: 40
+  visionMask:
+    serializedVersion: 2
+    m_Bits: 66048
+  eyeHeight: 1
+  proximityRadius: 3
+  scanRotationSpeed: 120
+  scanDuration: 2.5
+  postSightTrackDuration: 1.5
+  searchSpeed: 2
+  aggroSpeed: 3.5
+  spellDefinition: {fileID: 11400000, guid: 1d87133ce7f75c1f9934755e76502f3d, type: 2}
+  shootPoint: {fileID: 9181887677774828612}
+  shootCooldown: 0.71
+  shootRange: 12
+  accuracyDegrees: 4
+  aimHeightOffset: 0
+--- !u!114 &8098580530910148078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072444061591711186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f5d0ff319ded6b9bbc4772a1a92534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statEntries:
+  - type: 0
+    stat:
+      BaseValue: 100
+      m_modifiers: []
+  regenConfigs: []
+--- !u!114 &8877952591482724127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072444061591711186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93454008ae78f0da492f5403f00bcd81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popupHeight: 2.4
 --- !u!95 &7072444061582351952
 Animator:
   serializedVersion: 7
@@ -1866,35 +1932,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6524544578548447079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072444061591711186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 833639417c499eb4bb9edea925fb8c59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolParent: {fileID: 0}
-  waitTimeAtPoint: 2
-  visionRange: 15
-  visionAngle: 60
-  visionMask:
-    serializedVersion: 2
-    m_Bits: 66048
-  scanRotationSpeed: 120
-  scanDuration: 2.5
-  currentState: 0
-  loseAggroDelay: 0.5
-  projectilePrefab: {fileID: 514375585092279182, guid: f1d7ae2831796ff48b591cb9242be715, type: 3}
-  shootPoint: {fileID: 9181887677774828612}
-  shootCooldown: 1.5
-  shootRange: 12
-  projectileSpeed: 18
-  accuracyDegrees: 7
 --- !u!54 &662673775638878576
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1967,37 +2004,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &8098580530910148078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072444061591711186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01f5d0ff319ded6b9bbc4772a1a92534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statEntries:
-  - type: 0
-    stat:
-      BaseValue: 100
-      m_modifiers: []
-  regenConfigs: []
---- !u!114 &8877952591482724127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072444061591711186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93454008ae78f0da492f5403f00bcd81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupHeight: 2.4
 --- !u!1 &7072444061591711188
 GameObject:
   m_ObjectHideFlags: 0

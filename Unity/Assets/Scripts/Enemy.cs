@@ -15,6 +15,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public float popupHeight = 1.4f;
 
     private StatController m_stats;
+    
+    /// <summary>
+    /// Event fired when this enemy takes damage. Used by AI controllers for aggro.
+    /// </summary>
+    public event System.Action OnDamageTaken;
 
     void Awake()
     {
@@ -50,6 +55,9 @@ public class Enemy : MonoBehaviour, IDamageable
         SpawnDamagePopup(result.TotalDamage, result.WasCritical);
 
         m_stats.ModifyResource(StatType.Health, -result.TotalDamage);
+        
+        // Notify AI of damage for aggro
+        OnDamageTaken?.Invoke();
 
         foreach (var app in context.StatusEffects) {
             app.Effect.Apply(m_stats); 

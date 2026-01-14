@@ -50,6 +50,11 @@ public class PlayerControllerClean : MonoBehaviour, IDamageable
 
         m_stats.ModifyResource(StatType.Health, -result.TotalDamage);
 
+        // Flash damage vignette
+        if (DamageVignette.Instance != null) {
+            DamageVignette.Instance.Flash();
+        }
+
         // Apply status effects
         foreach (var app in context.StatusEffects) {
             app.Effect.Apply(m_stats);
@@ -68,6 +73,8 @@ public class PlayerControllerClean : MonoBehaviour, IDamageable
     {
         Debug.Log("Player has died!");
         // TODO: Implement death handling (respawn, game over screen, etc.)
+        // For now, just reload the current scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
     private void Awake()
@@ -82,6 +89,23 @@ public class PlayerControllerClean : MonoBehaviour, IDamageable
 
         if (m_fpvCameraTransform != null) {
             m_fpvCameraTransform.gameObject.SetActive(true);
+        }
+    }
+
+    void Start()
+    {
+        // Find the global player health bar canvas and subscribe to health changes
+        GameObject healthBarCanvas = GameObject.Find("PlayerHealthBarCanvas");
+        if (healthBarCanvas != null) {
+            FloatingHealthBar floatingHealthBar = healthBarCanvas.GetComponentInChildren<FloatingHealthBar>();
+            if (floatingHealthBar != null) {
+                Debug.Log("PlayerHealthBarCanvas found and subscribed to player health.");
+                m_stats.SubscribeToResource(StatType.Health, floatingHealthBar.UpdateHealthBar);
+            } else {
+                Debug.LogWarning("PlayerHealthBarCanvas found but no FloatingHealthBar component in children.");
+            }
+        } else {
+            Debug.LogWarning("PlayerHealthBarCanvas not found in scene.");
         }
     }
 

@@ -1,19 +1,16 @@
-/////////////////////////////////
-// WIP / VERY EXPERIMENTAL !!! //
-/////////////////////////////////
-
 using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
 /// A projectile fired by enemies. Uses the same SpellEffect pipeline as player projectiles
 /// for full effect support (homing, damage conversion, status effects, etc.).
+/// Uses raycast-based hit detection for reliable collision.
 /// </summary>
 public class EnemyProjectile : MonoBehaviour, IProjectile
 {
     // --- Stats ---
-    private float m_speed = 0.0f;
-    private float m_lifetime = 0.0f;
+    private float m_speed = 10.0f;
+    private float m_lifetime = 5.0f;
     private float m_spawnTime;
     public Vector3 Direction { get; private set; }
     
@@ -25,6 +22,10 @@ public class EnemyProjectile : MonoBehaviour, IProjectile
     [Header("Target Filter")]
     [Tooltip("Tags that can be damaged by this projectile")]
     public string[] damageableTags = { "Player" };
+    
+    [Header("Collision")]
+    [Tooltip("Layers to check for collision")]
+    public LayerMask collisionMask = ~0; // Everything by default
 
     // --- References ---
     private List<SpellEffect> m_runtimeEffects = new List<SpellEffect>();
@@ -33,9 +34,10 @@ public class EnemyProjectile : MonoBehaviour, IProjectile
     public Transform Transform => transform;
 
     private bool m_isDestroyed = false;
+    private Vector3 m_lastPosition;
 
     /// <summary>
-    /// Initializes the projectile. Called by the EnemyAttackController.
+    /// Initializes the projectile. Called by the EnemyAttackController or ShooterEnemyController.
     /// </summary>
     public void Initialize(List<SpellEffect> effects, Vector3 direction, StatController ownerStats)
     {
@@ -44,6 +46,7 @@ public class EnemyProjectile : MonoBehaviour, IProjectile
         m_ownerStats = ownerStats;
         m_spawnTime = Time.time;
         m_nextTickTime = Time.time + m_tickRate;
+        m_lastPosition = transform.position;
         transform.rotation = Quaternion.LookRotation(Direction);
 
         foreach (var effect in m_runtimeEffects) {
@@ -75,13 +78,36 @@ public class EnemyProjectile : MonoBehaviour, IProjectile
     {
         if (m_isDestroyed) return;
 
-        transform.position += Direction * m_speed * Time.deltaTime;
+        // Calculate new position
+        Vector3 movement = Direction * m_speed * Time.deltaTime;
+        Vector3 newPosition = transform.position + movement;
+        
+        // Raycast from last position to new position to detect hits
+        float distance = movement.magnitude;
+        if (distance > 0.001f)
+        {
+            if (Physics.Raycast(m_lastPosition, Direction, out RaycastHit hit, distance + 0.5f, collisionMask))
+            {
+                // Move to hit point
+                transform.position = hit.point;
+                
+                // Handle the hit
+                HandleHit(hit.collider.gameObject);
+                return; // Don't continue moving if we hit something
+            }
+        }
+        
+        // Move to new position
+        transform.position = newPosition;
+        m_lastPosition = transform.position;
 
+        // Check lifetime
         if (Time.time > m_spawnTime + m_lifetime) {
             DestroyProjectile(isLifetimeEnd: true);
             return;
         }
 
+        // Update effects
         foreach (var effect in m_runtimeEffects) {
             effect.OnUpdate(this);
         }
@@ -96,38 +122,56 @@ public class EnemyProjectile : MonoBehaviour, IProjectile
 
     void OnCollisionEnter(Collision collision)
     {
+        HandleHit(collision.gameObject);
+    }
+    
+    void OnTriggerEnter(Collider other)
+    {
+        HandleHit(other.gameObject);
+    }
+    
+    private void HandleHit(GameObject hitObject)
+    {
         if (m_isDestroyed) return;
 
-        // Check tag filter
+        // Check tag filter for damageables
         bool validTag = false;
         foreach (var tag in damageableTags) {
-            if (collision.gameObject.CompareTag(tag)) {
+            if (hitObject.CompareTag(tag)) {
                 validTag = true;
                 break;
             }
         }
         
-        if (validTag && collision.gameObject.TryGetComponent<IDamageable>(out var target)) {
-            // Don't hit the owner
-            if (m_ownerStats != null && target.GetTransform() == m_ownerStats.transform) return;
+        if (validTag)
+        {
+            // Try to find IDamageable on hit object or parent
+            IDamageable target = hitObject.GetComponent<IDamageable>();
+            if (target == null) target = hitObject.GetComponentInParent<IDamageable>();
+            
+            if (target != null)
+            {
+                // Don't hit the owner
+                if (m_ownerStats != null && target.GetTransform() == m_ownerStats.transform) return;
 
-            HitContext context = new HitContext(target, m_ownerStats);
+                HitContext context = new HitContext(target, m_ownerStats);
 
-            // Run the SpellEffect pipeline to compile the hit
-            foreach (var effect in m_runtimeEffects) {
-                effect.OnCompileHit(this, context);
-            }
+                // Run the SpellEffect pipeline to compile the hit
+                foreach (var effect in m_runtimeEffects) {
+                    effect.OnCompileHit(this, context);
+                }
 
-            target.TakeHit(context);
+                target.TakeHit(context);
+                Debug.Log($"Enemy projectile hit {hitObject.name}!");
 
-            // Post-hit effects
-            foreach (var effect in m_runtimeEffects) {
-                effect.OnHit(this, context);
+                // Post-hit effects
+                foreach (var effect in m_runtimeEffects) {
+                    effect.OnHit(this, context);
+                }
             }
         }
 
-        // Destroy on impact
-        // TODO: A "Piercing" effect would set a flag to prevent this
+        // Destroy on impact with anything
         DestroyProjectile(isLifetimeEnd: false);
     }
 

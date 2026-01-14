@@ -9,14 +9,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 107677694108699176}
+  - component: {fileID: 1208188250239224322}
+  - component: {fileID: 6564738421948323864}
+  - component: {fileID: 7955941485382412949}
+  - component: {fileID: 1095436587345249661}
   - component: {fileID: 6076521004980037199}
   - component: {fileID: 3594222526544131590}
   - component: {fileID: 4603406172896831147}
   - component: {fileID: 319980452580533384}
-  - component: {fileID: 1208188250239224322}
   - component: {fileID: 7470281807959256683}
-  - component: {fileID: 6564738421948323864}
-  - component: {fileID: 7955941485382412949}
   m_Layer: 18
   m_Name: WarriorEnemy
   m_TagString: Untagged
@@ -41,6 +42,102 @@ Transform:
   - {fileID: 3343381141131541597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1208188250239224322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136802685188797294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77422874efa21ad46ae24491edf62d31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  patrolParent: {fileID: 0}
+  waitTimeAtPoint: 2
+  patrolSpeed: 1.5
+  visionRange: 15
+  visionAngleHorizontal: 60
+  visionAngleVertical: 30
+  visionMask:
+    serializedVersion: 2
+    m_Bits: 66048
+  eyeHeight: 1
+  proximityRadius: 4
+  scanRotationSpeed: 150
+  scanDuration: 3
+  postSightTrackDuration: 1.5
+  searchSpeed: 2
+  aggroSpeed: 3.5
+  attackRange: 2
+  attackCooldown: 1.5
+  attackDamageRadius: 1.5
+  attackOffset: {x: 0, y: 0.5, z: 1}
+  damageType: 0
+  damageDelay: 0.3
+  warriorVisual: {fileID: 2895434704898971647}
+--- !u!114 &6564738421948323864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136802685188797294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f5d0ff319ded6b9bbc4772a1a92534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statEntries:
+  - type: 0
+    stat:
+      BaseValue: 100
+      m_modifiers: []
+  - type: 6
+    stat:
+      BaseValue: 15
+      m_modifiers: []
+  - type: 7
+    stat:
+      BaseValue: 0.3
+      m_modifiers: []
+  - type: 2
+    stat:
+      BaseValue: 0.3
+      m_modifiers: []
+  regenConfigs: []
+--- !u!114 &7955941485382412949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136802685188797294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93454008ae78f0da492f5403f00bcd81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popupHeight: 1.4
+--- !u!114 &1095436587345249661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136802685188797294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b27be907831ca62c8eb2cee2571541e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageType: 0
+  damageMultiplier: 1
+  damageableTags:
+  - Player
+  statusEffects: []
 --- !u!33 &6076521004980037199
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -144,32 +241,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &1208188250239224322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136802685188797294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77422874efa21ad46ae24491edf62d31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolParent: {fileID: 0}
-  waitTimeAtPoint: 2
-  visionRange: 15
-  visionAngle: 40
-  visionMask:
-    serializedVersion: 2
-    m_Bits: 66048
-  scanRotationSpeed: 120
-  scanDuration: 3
-  currentState: 0
-  loseAggroDelay: 0.5
-  warriorVisual: {fileID: 2895434704898971647}
-  attackRange: 2
-  attackCooldown: 1.5
 --- !u!195 &7470281807959256683
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -192,37 +263,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6564738421948323864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136802685188797294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01f5d0ff319ded6b9bbc4772a1a92534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statEntries:
-  - type: 0
-    stat:
-      BaseValue: 100
-      m_modifiers: []
-  regenConfigs: []
---- !u!114 &7955941485382412949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136802685188797294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93454008ae78f0da492f5403f00bcd81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupHeight: 1.4
 --- !u!1001 &77099701245458323
 PrefabInstance:
   m_ObjectHideFlags: 0
